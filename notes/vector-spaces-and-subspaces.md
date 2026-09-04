@@ -14,7 +14,7 @@ $$
 
 | 观察方向 | 已学空间 | 描述的内容 |
 | --- | --- | --- |
-| 输出端 $\mathbb{R}^m$ | 列空间 $\operatorname{Col}(A)$ | $A$ 能产生哪些输出 |
+| 输出端 $\mathbb{R}^m$ | 列空间 $\mathrm{Col}(A)$ | $A$ 能产生哪些输出 |
 | 输入端 $\mathbb{R}^n$ | 零空间 $N(A)$ | 哪些输入会被 $A$ 变成零向量 |
 
 后文先建立子空间与张成，再从矩阵的列进入列空间；接着用消元识别主元、自由变量和秩，由此得到零空间，最后把列空间与零空间合起来描述 $A\mathbf{x}=\mathbf{b}$ 的全部解。
@@ -27,8 +27,7 @@ $$
 
 $$
 \mathbb{R}^n
-=
-\{(x_1,x_2,\ldots,x_n)\mid x_1,x_2,\ldots,x_n\in\mathbb{R}\}
+= \{(x_1,x_2,\ldots,x_n)\mid x_1,x_2,\ldots,x_n\in\mathbb{R}\}
 $$
 
 $\mathbb{R}^n$ 表示所有由 $n$ 个实数组成的向量。比如，$\mathbb{R}^2$ 是所有二维实向量的集合，$\mathbb{R}^3$ 是所有三维实向量的集合。
@@ -84,9 +83,8 @@ $$
 一组向量所有线性组合构成的集合叫作它们的**张成**（span）：
 
 $$
-\operatorname{span}\{\mathbf{v}_1,\ldots,\mathbf{v}_k\}
-=
-\{c_1\mathbf{v}_1+\cdots+c_k\mathbf{v}_k
+\mathrm{span}\{\mathbf{v}_1,\ldots,\mathbf{v}_k\}
+= \{c_1\mathbf{v}_1+\cdots+c_k\mathbf{v}_k
 \mid c_1,\ldots,c_k\in\mathbb{R}\}.
 $$
 
@@ -111,8 +109,7 @@ $$
 $$
 \underbrace{A}_{m\times n}
 \underbrace{\mathbf{x}}_{n\times1}
-=
-\underbrace{\mathbf{b}}_{m\times1}.
+= \underbrace{\mathbf{b}}_{m\times1}.
 $$
 
 矩阵结构与方程组的对应关系是：
@@ -149,8 +146,7 @@ $$
 
 $$
 A\mathbf{x}
-=
-x_1\mathbf{a}_1+x_2\mathbf{a}_2+\cdots+x_n\mathbf{a}_n.
+= x_1\mathbf{a}_1+x_2\mathbf{a}_2+\cdots+x_n\mathbf{a}_n.
 $$
 
 因此，矩阵乘向量的本质是：用输入向量 $\mathbf{x}$ 的各个分量作为系数，对矩阵各列进行线性组合。
@@ -160,17 +156,15 @@ $$
 矩阵各列的所有线性组合组成矩阵的**列空间**：
 
 $$
-\operatorname{Col}(A)
-=
-\operatorname{span}\{\mathbf{a}_1,\ldots,\mathbf{a}_n\}
-=
-\{A\mathbf{x}\mid\mathbf{x}\in\mathbb{R}^n\}.
+\mathrm{Col}(A)
+= \mathrm{span}\{\mathbf{a}_1,\ldots,\mathbf{a}_n\}
+= \{A\mathbf{x}\mid\mathbf{x}\in\mathbb{R}^n\}.
 $$
 
 每个列向量都有 $m$ 个分量，所以
 
 $$
-\operatorname{Col}(A)\subseteq\mathbb{R}^m.
+\mathrm{Col}(A)\subseteq\mathbb{R}^m.
 $$
 
 列空间描述的是矩阵能够产生的全部输出，不一定等于整个 $\mathbb{R}^m$。
@@ -184,7 +178,7 @@ $$
 $$
 A\mathbf{x}=\mathbf{b}\text{ 有解}
 \quad\Longleftrightarrow\quad
-\mathbf{b}\in\operatorname{Col}(A).
+\mathbf{b}\in\mathrm{Col}(A).
 $$
 
 方程数与未知数数只能提供线索，不能单独决定某个具体方程组是否有解：
@@ -208,8 +202,7 @@ A=
 2&6&8\\
 2&8&10
 \end{bmatrix}
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 \mathbf{a}_1&\mathbf{a}_2&\mathbf{a}_3
 \end{bmatrix}.
 $$
@@ -223,9 +216,8 @@ $$
 因此第三列没有提供新的方向：
 
 $$
-\operatorname{span}\{\mathbf{a}_1,\mathbf{a}_2,\mathbf{a}_3\}
-=
-\operatorname{span}\{\mathbf{a}_1,\mathbf{a}_2\}.
+\mathrm{span}\{\mathbf{a}_1,\mathbf{a}_2,\mathbf{a}_3\}
+= \mathrm{span}\{\mathbf{a}_1,\mathbf{a}_2\}.
 $$
 
 同时
@@ -248,7 +240,7 @@ $$
 则 $A\neq B$，但
 
 $$
-\operatorname{Col}(A)=\operatorname{Col}(B).
+\mathrm{Col}(A)=\mathrm{Col}(B).
 $$
 
 所以“列空间相同”不等于“方程组相同”。
@@ -258,11 +250,9 @@ $$
 上一节已经得到
 
 $$
-\operatorname{Col}(A)
-=
-\operatorname{span}\{\mathbf{a}_1,\mathbf{a}_2,\mathbf{a}_3\}
-=
-\operatorname{span}\{\mathbf{a}_1,\mathbf{a}_2\}.
+\mathrm{Col}(A)
+= \mathrm{span}\{\mathbf{a}_1,\mathbf{a}_2,\mathbf{a}_3\}
+= \mathrm{span}\{\mathbf{a}_1,\mathbf{a}_2\}.
 $$
 
 三列都能用来生成列空间，但 $\mathbf{a}_3$ 可以由前两列线性组合得到，因此它是冗余的。去掉它以后，$\mathbf{a}_1,\mathbf{a}_2$ 仍能张成整个列空间，而且二者线性无关。
@@ -278,20 +268,19 @@ $$
 \{\mathbf{a}_1,\mathbf{a}_2\}
 $$
 
-是 $\operatorname{Col}(A)$ 的一组基。基回答的是“哪些向量构成这个空间的一套独立生成方向”，所以**基是一组向量**。
+是 $\mathrm{Col}(A)$ 的一组基。基回答的是“哪些向量构成这个空间的一套独立生成方向”，所以**基是一组向量**。
 
 接下来数这组基中有几个向量。基中向量的个数称为空间的**维数**（dimension）。本例的基含有两个向量，所以
 
 $$
-\dim\bigl(\operatorname{Col}(A)\bigr)=2.
+\dim\bigl(\mathrm{Col}(A)\bigr)=2.
 $$
 
 对于矩阵 $A$，其**秩**（rank）定义为列空间的维数，因此
 
 $$
-\operatorname{rank}(A)
-=
-\dim\bigl(\operatorname{Col}(A)\bigr)
+\mathrm{rank}(A)
+= \dim\bigl(\mathrm{Col}(A)\bigr)
 =2.
 $$
 
@@ -310,10 +299,8 @@ $$
 $$
 \boxed{
 \text{一组基所含向量的数量}
-=
-\dim\bigl(\operatorname{Col}(A)\bigr)
-=
-\operatorname{rank}(A)
+= \dim\bigl(\mathrm{Col}(A)\bigr)
+= \mathrm{rank}(A)
 }
 $$
 
@@ -338,12 +325,9 @@ $$
 $$
 \boxed{
 \text{主元列数量}
-=
-\text{基向量数量}
-=
-\dim\bigl(\operatorname{Col}(A)\bigr)
-=
-\operatorname{rank}(A)
+= \text{基向量数量}
+= \dim\bigl(\mathrm{Col}(A)\bigr)
+= \mathrm{rank}(A)
 }
 $$
 
@@ -381,8 +365,7 @@ $$
 
 $$
 C=A^T
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 1&2&2&2\\
 2&4&6&8\\
 3&6&8&10
@@ -415,9 +398,8 @@ $$
 
 $$
 R=
-\operatorname{rref}(C)
-=
-\begin{bmatrix}
+\mathrm{rref}(C)
+= \begin{bmatrix}
 1&2&0&-2\\
 0&0&1&2\\
 0&0&0&0
@@ -448,17 +430,17 @@ $$
 
 ### 4. 用消元结果寻找列空间的基
 
-主元列的编号由消元后的矩阵确定，但 $\operatorname{Col}(C)$ 的基必须取自**原矩阵 $C$ 的对应列**。
+主元列的编号由消元后的矩阵确定，但 $\mathrm{Col}(C)$ 的基必须取自**原矩阵 $C$ 的对应列**。
 
 这是因为行操作保持主元位置、秩和列之间的依赖关系，却通常会改变列向量本身以及它们实际张成的列空间：
 
 $$
-\operatorname{Col}(EC)=E\operatorname{Col}(C),
+\mathrm{Col}(EC)=E\mathrm{Col}(C),
 $$
 
-一般并不等于 $\operatorname{Col}(C)$。
+一般并不等于 $\mathrm{Col}(C)$。
 
-本例的主元列编号是 $1,3$，所以 $\operatorname{Col}(C)$ 的一组基是
+本例的主元列编号是 $1,3$，所以 $\mathrm{Col}(C)$ 的一组基是
 
 $$
 \left\{
@@ -587,15 +569,13 @@ $$
 
 $$
 \mathbf{x}
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 -2s+2t\\
 s\\
 -2t\\
 t
 \end{bmatrix}
-=
-s
+= s
 \begin{bmatrix}
 -2\\1\\0\\0
 \end{bmatrix}
@@ -628,8 +608,7 @@ $$
 
 $$
 N(C)
-=
-\operatorname{span}
+= \mathrm{span}
 \left\{
 \mathbf{v}_1,\mathbf{v}_2
 \right\}.
@@ -669,8 +648,7 @@ $I$ 是主元列形成的单位矩阵块，$F$ 是自由列组成的矩阵块。
 
 $$
 \mathbf{x}
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 \mathbf{x}_P\\
 \mathbf{x}_F
 \end{bmatrix}.
@@ -684,8 +662,7 @@ $$
 \mathbf{x}_P\\
 \mathbf{x}_F
 \end{bmatrix}
-=
-\mathbf{0}.
+= \mathbf{0}.
 $$
 
 于是
@@ -707,8 +684,7 @@ $$
 \mathbf{x}_P\\
 \mathbf{x}_F
 \end{bmatrix}
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 -F\\
 I
 \end{bmatrix}
@@ -744,23 +720,21 @@ $$
 $$
 C\in\mathbb{R}^{m\times n},
 \qquad
-\operatorname{rank}(C)=r,
+\mathrm{rank}(C)=r,
 $$
 
 则主元变量有 $r$ 个，自由变量有 $n-r$ 个。因此
 
 $$
-\operatorname{nullity}(C)
-=
-\dim N(C)
-=
-n-r.
+\mathrm{nullity}(C)
+= \dim N(C)
+= n-r.
 $$
 
 这就是秩－零度定理：
 
 $$
-\operatorname{rank}(C)+\operatorname{nullity}(C)=n.
+\mathrm{rank}(C)+\mathrm{nullity}(C)=n.
 $$
 
 当前例子中 $n=4,r=2$，所以
@@ -776,15 +750,14 @@ $$
 矩阵转置会交换行和列，但不会改变秩：
 
 $$
-\operatorname{rank}(A)=\operatorname{rank}(A^T).
+\mathrm{rank}(A)=\mathrm{rank}(A^T).
 $$
 
 其本质是行秩等于列秩。对前面的矩阵，
 
 $$
-\operatorname{rank}(A)
-=
-\operatorname{rank}(A^T)
+\mathrm{rank}(A)
+= \mathrm{rank}(A^T)
 =2.
 $$
 
@@ -890,8 +863,7 @@ $$
 
 $$
 \text{complete solution（通解）}
-=
-\text{particular solution（特解）}
+= \text{particular solution（特解）}
 +
 \text{null-space solution（零空间解）}.
 $$
@@ -938,7 +910,7 @@ $$
 $$
 A\in\mathbb{R}^{m\times n},
 \qquad
-r=\operatorname{rank}(A).
+r=\mathrm{rank}(A).
 $$
 
 其中 $m$ 是行数和方程数，$n$ 是列数和未知数数，$r$ 是主元数量。
@@ -950,7 +922,7 @@ r=m
 \quad\Longleftrightarrow\quad
 \text{每一行都有主元}
 \quad\Longleftrightarrow\quad
-\operatorname{Col}(A)=\mathbb{R}^m.
+\mathrm{Col}(A)=\mathbb{R}^m.
 $$
 
 所以 $r=m$ 保证 $A\mathbf{x}=\mathbf{b}$ 对每个 $\mathbf{b}\in\mathbb{R}^m$ 都有解，控制的是**存在性**。
@@ -1021,7 +993,7 @@ $$
 满秩方阵的 RREF 是单位矩阵：
 
 $$
-\operatorname{rref}(A)=I.
+\mathrm{rref}(A)=I.
 $$
 
 注意，这是说 $A$ 的 RREF 等于 $I$，并不是说原矩阵 $A$ 本身一定等于 $I$。
@@ -1057,18 +1029,18 @@ $$
 对于 $n\times n$ 方阵，下面这些说法彼此等价：
 
 $$
-\operatorname{rank}(A)=n
+\mathrm{rank}(A)=n
 \Longleftrightarrow
 \text{每行、每列都有主元}
 \Longleftrightarrow
-\operatorname{rref}(A)=I
+\mathrm{rref}(A)=I
 $$
 
 $$
 \Longleftrightarrow
 N(A)=\{\mathbf{0}\}
 \Longleftrightarrow
-\operatorname{Col}(A)=\mathbb{R}^n
+\mathrm{Col}(A)=\mathbb{R}^n
 \Longleftrightarrow
 A^{-1}\text{ 存在}
 $$
@@ -1117,7 +1089,7 @@ $$
 对于 $C\in\mathbb{R}^{m\times n}$：
 
 $$
-\operatorname{Col}(C)\subseteq\mathbb{R}^m,
+\mathrm{Col}(C)\subseteq\mathbb{R}^m,
 \qquad
 N(C)\subseteq\mathbb{R}^n.
 $$
@@ -1126,7 +1098,7 @@ $$
 
 | 空间 | 核心问题 |
 | --- | --- |
-| 列空间 $\operatorname{Col}(C)$ | 哪些输出 $\mathbf{b}$ 能由 $C$ 产生？ |
+| 列空间 $\mathrm{Col}(C)$ | 哪些输出 $\mathbf{b}$ 能由 $C$ 产生？ |
 | 零空间 $N(C)$ | 哪些输入 $\mathbf{x}$ 会被 $C$ 送到零向量？ |
 
 因此：
@@ -1162,7 +1134,7 @@ $$
 $$
 A\mathbf{x}=\mathbf{b}\text{ 有解}
 \Longleftrightarrow
-\mathbf{b}\in\operatorname{Col}(A)
+\mathbf{b}\in\mathrm{Col}(A)
 $$
 
 $$
@@ -1186,7 +1158,7 @@ $$
 $$
 
 $$
-\mathbf{b}\in\operatorname{Col}(A)
+\mathbf{b}\in\mathrm{Col}(A)
 \longrightarrow
 \text{找到一个特解 }\mathbf{x}_p
 \longrightarrow
