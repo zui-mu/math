@@ -80,7 +80,13 @@ T=\{(x,1)\mid x\in\mathbb{R}\}
 
 ### 3. 张成
 
-一组向量所有线性组合构成的集合叫作它们的**张成**（span）：
+给定向量 $`\mathbf{v}_1,\ldots,\mathbf{v}_k`$，选定一组具体系数后得到的
+
+```math
+c_1\mathbf{v}_1+\cdots+c_k\mathbf{v}_k
+```
+
+叫作一个**线性组合**（linear combination）。让所有系数在实数范围内任意变化，所得全部线性组合构成的集合叫作这些向量的**张成**（span）：
 
 ```math
 \mathrm{span}\{\mathbf{v}_1,\ldots,\mathbf{v}_k\}
@@ -88,7 +94,31 @@ T=\{(x,1)\mid x\in\mathbb{R}\}
 \mid c_1,\ldots,c_k\in\mathbb{R}\}.
 ```
 
+因此，linear combination 指某一个具体结果，span 指把所有可能的系数都取一遍后得到的整个集合。例如，
+
+```math
+\mathrm{span}\left\{
+\begin{bmatrix}1\\2\end{bmatrix}
+\right\}
+=\left\{
+c\begin{bmatrix}1\\2\end{bmatrix}
+\mid c\in\mathbb{R}
+\right\}
+```
+
+是一条经过原点的直线；而
+
+```math
+\mathrm{span}\left\{
+\begin{bmatrix}1\\0\end{bmatrix},
+\begin{bmatrix}0\\1\end{bmatrix}
+\right\}
+=\mathbb{R}^2.
+```
+
 张成集合包含零向量，并且对加法和数乘封闭，所以它一定是子空间。几何上，它可能是原点、过原点的直线、过原点的平面，或者更高维的子空间。
+
+> **张成关注的是所有线性组合：这些向量通过任意数乘与相加，最终能够覆盖出整个什么空间。**
 
 子空间与张成为后面两个核心对象提供了共同语言：
 
@@ -192,6 +222,20 @@ A\mathbf{x}=\mathbf{b}\text{ 有解}
 
 ### 1. 冗余列与线性相关
 
+向量组 $`\mathbf{v}_1,\ldots,\mathbf{v}_k`$ **线性无关**（linearly independent），是指方程
+
+```math
+c_1\mathbf{v}_1+\cdots+c_k\mathbf{v}_k=\mathbf{0}
+```
+
+只有平凡解
+
+```math
+c_1=\cdots=c_k=0.
+```
+
+只要能找到一组不全为零的系数，仍使线性组合等于零向量，这组向量就**线性相关**（linearly dependent）。线性无关关注的不是向量能组合出多少结果，而是它们之间是否存在冗余关系。
+
 考虑贯穿后文的矩阵
 
 ```math
@@ -228,6 +272,24 @@ A=
 
 给出了一组不全为零的系数，所以三列线性相关。能够由其他列线性组合得到的列是冗余列，它可以从列空间的生成集合中去掉。
 
+一个特别直接的判据是：**只要向量组中含有零向量，这组向量就一定线性相关。** 假设其中第 $`j`$ 个向量为 $`\mathbf{0}`$，令 $`c_j=1`$、其余系数全为 $`0`$，便得到一个系数不全为零的关系：
+
+```math
+0\mathbf{v}_1+\cdots+1\mathbf{0}+\cdots+0\mathbf{v}_k
+=\mathbf{0}.
+```
+
+反过来，没有零向量并不能保证线性无关。例如，
+
+```math
+\mathbf{v}_1=\begin{bmatrix}1\\2\end{bmatrix},
+\qquad
+\mathbf{v}_2=\begin{bmatrix}2\\4\end{bmatrix}
+=2\mathbf{v}_1
+```
+
+中的两个向量都不是零向量，但它们仍然线性相关。若矩阵的某一列是零向量，该列也不可能成为主元列，全部列组成的向量组必然线性相关。
+
 删除冗余列会改变矩阵和未知数的数量，却不会改变能够产生的输出集合。若
 
 ```math
@@ -259,8 +321,21 @@ B=
 
 一组向量同时满足下面两个条件，就称为这个空间的一组**基**（basis）：
 
-1. **能够张成整个空间**：空间中的每个向量都能由它们线性组合得到；
-2. **线性无关**：其中没有向量可以由其他向量线性组合得到。
+> “A basis for a space is a sequence of vectors $`\mathbf{v}_1,\mathbf{v}_2,\ldots,\mathbf{v}_d`$ such that they are independent and they span the space.”
+
+1. **线性无关**：只有系数全为零时，它们的线性组合才等于零向量；这保证向量组中没有冗余方向。
+2. **张成整个空间**：空间中的每个向量都能由它们线性组合得到；这保证向量组没有遗漏空间中的方向。
+
+老师把这几个概念压缩成了下面四句：
+
+> - **Independence:** looks at combinations being zero.
+> - **Spanning:** looks at all the combinations.
+> - **Basis:** combines independence and spanning.
+> - **Dimension:** the number of vectors in any basis, because every basis has the same number.
+
+也就是说，线性无关排除“向量太多而产生冗余”，张成排除“向量太少而无法覆盖整个空间”。基同时满足二者，是一套**既没有冗余、又没有遗漏**的生成向量。
+
+> **线性无关保证不多，张成保证不少；基就是刚刚好。维数则数出这份“刚刚好”中有几个向量。**
 
 因此，本例中
 
@@ -270,7 +345,7 @@ B=
 
 是 $`\mathrm{Col}(A)`$ 的一组基。基回答的是“哪些向量构成这个空间的一套独立生成方向”，所以**基是一组向量**。
 
-接下来数这组基中有几个向量。基中向量的个数称为空间的**维数**（dimension）。本例的基含有两个向量，所以
+接下来数这组基中有几个向量。任意一组基所含向量的个数称为空间的**维数**（dimension）。本例的基含有两个向量，所以
 
 ```math
 \dim\bigl(\mathrm{Col}(A)\bigr)=2.
@@ -292,7 +367,7 @@ B=
 | 维数 | 这个空间有几个独立方向？ | 一个数字 | $`2`$ |
 | 秩 | 矩阵的列空间有几个独立方向？ | 一个数字 | $`2`$ |
 
->基属于所研究的向量空间；秩是针对矩阵而言的数字。基是一组向量；秩是这组基里有几个向量。
+> **基属于所研究的向量空间；秩是针对矩阵而言的数字。基是一组向量；秩是矩阵列空间的一组基里有几个向量。**
 
 研究矩阵 $`A`$ 的列空间时，二者通过“维数”联系起来：
 
@@ -319,6 +394,20 @@ B=
 ```
 
 它们所含的具体向量不同，但每组都有两个向量。一个空间的基可以不唯一，任意一组基所含向量的数量却一定相同，因此空间的维数是确定的。
+
+还要区分**矩阵的尺寸**与**空间的维数**。本例中 $`A`$ 是 $`4\times3`$ 矩阵，每一列都有四个分量，因此
+
+```math
+\mathrm{Col}(A)\subseteq\mathbb{R}^4.
+```
+
+但这个列空间只有两个独立方向，所以
+
+```math
+\dim\bigl(\mathrm{Col}(A)\bigr)=2.
+```
+
+$`4\times3`$ 描述矩阵有几行几列，$`\mathbb{R}^4`$ 描述列向量所在的环境空间，而维数 $`2`$ 描述列空间自身有几个独立方向。这三个数字回答的是不同问题。
 
 在简单矩阵中，可以直接观察哪些列是冗余的；对于一般矩阵，需要通过高斯消元找到主元列的位置。主元列的数量给出秩，而原矩阵中对应位置的列构成列空间的一组基：
 
@@ -454,7 +543,7 @@ R=
 主元的数量就是秩：
 
 ```math
-r=主元个数=rank(C)=2.
+r=\text{主元个数}=\mathrm{rank}(C)=2.
 ```
 
 主元位置不仅筛选出列空间的独立方向，还会把未知数分成主元变量和自由变量。自由变量正是进入零空间的入口。
@@ -616,6 +705,22 @@ N(C)
 
 $`\mathbf{v}_1,\mathbf{v}_2`$ 构成零空间的一组基。参数 $`s,t`$ 只是任意实数系数；自由变量有几个，就会得到几个基本的特殊解方向。
 
+这里可以把自由变量到零空间维数的过程完整写成：
+
+```math
+\text{两个自由变量}
+\Longrightarrow
+\text{两个独立参数 }s,t
+\Longrightarrow
+\text{两个特殊解}
+\Longrightarrow
+\text{两个零空间基向量}.
+```
+
+每个特殊解都由“一个自由变量取 $`1`$，其余自由变量取 $`0`$”得到。例如，取 $`s=1,t=0`$ 得到 $`\mathbf{v}_1`$，取 $`s=0,t=1`$ 得到 $`\mathbf{v}_2`$。因此 $`\mathbf{v}_1`$ 最后一个分量为 $`0`$，是因为这次令 $`t=0`$，并不是为了凑够四个分量而补上的零。
+
+特殊解能够张成全部解；它们又分别对应相互独立的自由参数，因此线性无关。二者共同保证这些特殊解构成零空间的一组基。
+
 零空间中的向量记录的是矩阵各列之间的依赖关系。例如
 
 ```math
@@ -723,7 +828,7 @@ C\in\mathbb{R}^{m\times n},
 \mathrm{rank}(C)=r,
 ```
 
-则主元变量有 $`r`$ 个，自由变量有 $`n-r`$ 个。因此
+矩阵有 $`n`$ 列，所以未知向量 $`\mathbf{x}`$ 有 $`n`$ 个分量。主元变量有 $`r`$ 个，剩下的自由变量有 $`n-r`$ 个。每个自由变量产生一个独立参数和一个基本的特殊解方向，因此
 
 ```math
 \mathrm{nullity}(C)
@@ -731,7 +836,26 @@ C\in\mathbb{R}^{m\times n},
 = n-r.
 ```
 
+这条等式可以理解为：
+
+```math
+\boxed{
+\text{自由变量数量}
+=\text{零空间基向量数量}
+=\dim N(C)
+=n-r
+}.
+```
+
 这就是秩－零度定理：
+
+```math
+\dim\bigl(\mathrm{Col}(C)\bigr)+\dim N(C)
+=r+(n-r)
+=n,
+```
+
+也就是
 
 ```math
 \mathrm{rank}(C)+\mathrm{nullity}(C)=n.
@@ -742,6 +866,34 @@ C\in\mathbb{R}^{m\times n},
 ```math
 \dim N(C)=4-2=2.
 ```
+
+这里尤其要区分“向量有几个分量”与“空间有几个独立方向”。当前矩阵 $`C`$ 是 $`3\times4`$ 矩阵，因此
+
+```math
+C:\mathbb{R}^4\longrightarrow\mathbb{R}^3.
+```
+
+输入 $`\mathbf{x}`$ 必须有四个分量，所以每个零空间向量也都有四个分量：
+
+```math
+N(C)\subseteq\mathbb{R}^4.
+```
+
+但 $`C`$ 只有两个自由变量，零空间的一组基只有两个向量，因此
+
+```math
+\dim N(C)=2.
+```
+
+同理，$`C`$ 的列向量有三个分量，所以
+
+```math
+\mathrm{Col}(C)\subseteq\mathbb{R}^3,
+\qquad
+\dim\bigl(\mathrm{Col}(C)\bigr)=r=2.
+```
+
+所以“位于 $`\mathbb{R}^4`$ 中”不等于“这个子空间是四维的”。前者说明向量的格式和环境空间，后者才说明子空间拥有多少个独立方向。
 
 没有自由变量时，齐次系统只有平凡解；只要存在自由变量，齐次系统就有无穷多个解。
 
@@ -1132,6 +1284,16 @@ C\mathbf{x}=\mathbf{b}\text{ 若有解，是否唯一}
 ```
 
 ```math
+\text{线性无关排除冗余}
+\quad+\quad
+\text{张成保证完整覆盖}
+\longrightarrow
+\text{基}
+\longrightarrow
+\text{维数}
+```
+
+```math
 A\mathbf{x}=\mathbf{b}\text{ 有解}
 \Longleftrightarrow
 \mathbf{b}\in\mathrm{Col}(A)
@@ -1142,9 +1304,9 @@ A\mathbf{x}=\mathbf{b}\text{ 有解}
 \longrightarrow
 \text{主元位置}
 \longrightarrow
-\text{秩与独立列}
-\longrightarrow
 \text{列空间的基}
+\longrightarrow
+\dim\bigl(\mathrm{Col}(A)\bigr)=\mathrm{rank}(A)=r
 ```
 
 ```math
@@ -1155,6 +1317,13 @@ A\mathbf{x}=\mathbf{b}\text{ 有解}
 \text{特殊解}
 \longrightarrow
 \text{零空间的基}
+\longrightarrow
+\dim N(A)=n-r
+```
+
+```math
+\dim\bigl(\mathrm{Col}(A)\bigr)+\dim N(A)
+=r+(n-r)=n
 ```
 
 ```math
@@ -1179,7 +1348,12 @@ r=n\Longrightarrow\text{有解时解唯一}.
 | 英文 | 中文 | 本节含义 |
 | --- | --- | --- |
 | scalar | 标量 | 与向量相乘的普通数 |
+| linear combination | 线性组合 | 用一组具体系数对向量进行数乘后相加 |
 | span | 张成 | 一组向量所有线性组合的集合 |
+| linearly independent | 线性无关 | 只有全零系数才能使线性组合等于零向量 |
+| linearly dependent | 线性相关 | 存在不全为零的系数使线性组合等于零向量 |
+| basis | 基 | 同时线性无关并张成整个空间的一组向量 |
+| dimension | 维数 | 空间任意一组基所含向量的数量 |
 | column space | 列空间 | 矩阵所有可能输出的集合 |
 | right-hand side | 右端向量 | $`A\mathbf{x}=\mathbf{b}`$ 中的目标输出 $`\mathbf{b}`$ |
 | pivot | 主元 | 阶梯形矩阵中每个非零行的领先非零元素 |
