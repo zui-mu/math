@@ -1,4 +1,4 @@
-# 向量空间、列空间与零空间
+# 向量空间与矩阵的四个基本子空间
 
 ## 课程主线与当前范围
 
@@ -10,16 +10,16 @@ A\mathbf{x}=\mathbf{b},
 A:\mathbb{R}^n\longrightarrow\mathbb{R}^m.
 ```
 
-其中 $`\mathbf{x}`$ 是输入，$`A\mathbf{x}`$ 是输出，$`\mathbf{b}`$ 是希望得到的目标输出。当前课程主要从两个方向理解矩阵 $`A`$：
+其中 $`\mathbf{x}`$ 是输入，$`A\mathbf{x}`$ 是输出，$`\mathbf{b}`$ 是希望得到的目标输出。课程先从列空间和零空间出发，现在已经进一步汇合到矩阵的四个基本子空间：
 
-| 观察方向 | 已学空间 | 描述的内容 |
+| 所在一侧 | 基本子空间 | 描述的内容 |
 | --- | --- | --- |
 | 输出端 $`\mathbb{R}^m`$ | 列空间 $`\mathrm{Col}(A)`$ | $`A`$ 能产生哪些输出 |
+| 输出端 $`\mathbb{R}^m`$ | 左零空间 $`N(A^T)`$ | 哪些方向与 $`A`$ 的全部列正交 |
+| 输入端 $`\mathbb{R}^n`$ | 行空间 $`\mathrm{Col}(A^T)`$ | $`A`$ 的全部行能够张成哪些方向 |
 | 输入端 $`\mathbb{R}^n`$ | 零空间 $`N(A)`$ | 哪些输入会被 $`A`$ 变成零向量 |
 
-后文先建立子空间与张成，再从矩阵的列进入列空间；接着用消元识别主元、自由变量和秩，由此得到零空间，最后把列空间与零空间合起来描述 $`A\mathbf{x}=\mathbf{b}`$ 的全部解。
-
-课程中已经计算并比较过 $`N(A^T)`$，但行空间、左零空间以及四个基本子空间之间的正交关系还没有正式展开。
+后文先建立子空间与张成，再从矩阵的列进入列空间；接着用消元识别主元、自由变量和秩，由此得到零空间。转置把同样的结构带到行空间与左零空间，四个空间最终共同说明矩阵保留、产生和消去的方向，并帮助描述 $`A\mathbf{x}=\mathbf{b}`$ 的全部解。
 
 ## 一、向量空间与子空间
 
@@ -939,9 +939,288 @@ N(A^T)\subseteq\mathbb{R}^4.
 
 秩相同不代表零空间相同。
 
-到这里，列空间已经回答目标输出是否能够到达，零空间则描述不会改变输出的输入变化。二者合在一起，就能写出非齐次方程的全部解。
+转置不仅给出另一个零空间，还把矩阵的行变成列。于是，列空间、零空间以及转置后的两个对应空间自然组成矩阵的四个基本子空间。
 
-## 七、用列空间与零空间描述完整解
+## 七、矩阵的四个基本子空间
+
+### 1. 四个空间的总图
+
+设
+
+```math
+A\in\mathbb{R}^{m\times n},
+\qquad
+\mathrm{rank}(A)=r.
+```
+
+矩阵 $`A`$ 的四个基本子空间（four fundamental subspaces）是：
+
+| 基本子空间 | 记号 | 所在的环境空间 | 维数 | 核心含义 |
+| --- | --- | --- | ---: | --- |
+| 列空间 | $`\mathrm{Col}(A)`$ | $`\mathbb{R}^m`$ | $`r`$ | $`A`$ 能产生的全部输出 |
+| 零空间 | $`N(A)`$ | $`\mathbb{R}^n`$ | $`n-r`$ | 被 $`A`$ 变成零向量的全部输入 |
+| 行空间 | $`\mathrm{Row}(A)=\mathrm{Col}(A^T)`$ | $`\mathbb{R}^n`$ | $`r`$ | $`A`$ 的各行所张成的空间 |
+| 左零空间 | $`N(A^T)`$ | $`\mathbb{R}^m`$ | $`m-r`$ | 与 $`A`$ 的全部列正交的方向 |
+
+它们分布在矩阵映射的两侧：
+
+```math
+\begin{array}{ccc}
+\mathbb{R}^n & \xrightarrow{\quad A\quad} & \mathbb{R}^m\\[2mm]
+\mathrm{Col}(A^T)\ (r) && \mathrm{Col}(A)\ (r)\\[1mm]
+N(A)\ (n-r) && N(A^T)\ (m-r)
+\end{array}
+```
+
+左边是输入所在的 $`\mathbb{R}^n`$：矩阵的每一行有 $`n`$ 个分量，零空间中的输入也有 $`n`$ 个分量。右边是输出所在的 $`\mathbb{R}^m`$：矩阵的每一列有 $`m`$ 个分量，左零空间中的向量也有 $`m`$ 个分量。
+
+> **四个基本子空间不是四套互不相关的新知识，而是把列空间、零空间、转置、秩、基与维数汇合到同一张图中。**
+
+### 2. 行空间与行秩
+
+把 $`A`$ 的行向量转置后，它们正是 $`A^T`$ 的列，因此
+
+```math
+\mathrm{Row}(A)=\mathrm{Col}(A^T).
+```
+
+行空间位于 $`\mathbb{R}^n`$。它的维数称为行秩；列空间的维数称为列秩。高斯消元得到的同一批 $`r`$ 个主元同时给出独立行和独立列的数量，所以
+
+```math
+\boxed{
+\text{行秩}
+=\text{列秩}
+=\mathrm{rank}(A)
+=r
+}.
+```
+
+因此
+
+```math
+\dim\bigl(\mathrm{Col}(A^T)\bigr)
+=\dim\bigl(\mathrm{Col}(A)\bigr)
+=r.
+```
+
+这里只能说两个空间的**维数相同**，不能说它们是同一个空间。$`\mathrm{Col}(A^T)`$ 位于 $`\mathbb{R}^n`$，$`\mathrm{Col}(A)`$ 位于 $`\mathbb{R}^m`$；当 $`m\neq n`$ 时，它们甚至位于不同的环境空间。
+
+#### 从相同行到列相关
+
+另取一个 $`3\times3`$ 方阵
+
+```math
+B=
+\begin{bmatrix}
+1&2&3\\
+2&4&5\\
+2&4&5
+\end{bmatrix}.
+```
+
+第二、三行相同，因此
+
+```math
+R_3-R_2=\mathbf{0}
+```
+
+给出了一个非平凡的行关系，说明各行线性相关。执行
+
+```math
+R_3\leftarrow R_3-R_2
+```
+
+会出现一个零行，所以最多只有两个主元：
+
+```math
+\mathrm{rank}(B)\leq2<3.
+```
+
+行相关之所以能进一步推出列相关，桥梁正是行秩等于列秩。独立行不足三个意味着秩小于三，也意味着独立列不足三个，因此三列必然线性相关：
+
+> “It has two identical rows. Its rows are obviously dependent. And that makes the columns dependent.”
+
+```math
+\boxed{
+\text{两行相同}
+\Longrightarrow
+\text{行相关}
+\Longrightarrow
+\mathrm{rank}(B)<3
+\Longrightarrow
+ B\text{ 不可逆}
+\Longrightarrow
+\text{列相关}
+}.
+```
+
+从主元角度看，零行使 $`B`$ 最多只有两个主元，不可能每列都有主元；从可逆性角度看，方阵的秩小于阶数，所以 RREF 不可能是单位矩阵。这是同一事实的两种表述。
+
+从零空间也能看到同一件事。因为 $`n=3`$ 且 $`r<3`$，所以 $`n-r>0`$，齐次方程 $`B\mathbf{x}=\mathbf{0}`$ 有自由变量和非零解。写成列组合就是
+
+```math
+x_1\mathbf{b}_1+x_2\mathbf{b}_2+x_3\mathbf{b}_3
+=\mathbf{0},
+\qquad
+\mathbf{x}\neq\mathbf{0},
+```
+
+这正是三列线性相关的定义。
+
+### 3. 左零空间
+
+对转置矩阵求零空间，得到第四个基本子空间：
+
+```math
+N(A^T)
+=\{\mathbf{y}\in\mathbb{R}^m\mid A^T\mathbf{y}=\mathbf{0}\}.
+```
+
+将等式转置，并使用 $`(BC)^T=C^TB^T`$，可得
+
+```math
+A^T\mathbf{y}=\mathbf{0}
+\quad\Longleftrightarrow\quad
+\mathbf{y}^TA=\mathbf{0}^T.
+```
+
+在后一种写法中，$`\mathbf{y}^T`$ 从矩阵左边相乘，所以 $`N(A^T)`$ 称为 **left null space（左零空间）**。
+
+$`A^T`$ 有 $`m`$ 列，并且
+
+```math
+\mathrm{rank}(A^T)=\mathrm{rank}(A)=r,
+```
+
+所以秩－零度关系给出
+
+```math
+\dim N(A^T)=m-r.
+```
+
+### 4. 两对正交关系
+
+若 $`\mathbf{x}\in N(A)`$，则 $`A\mathbf{x}=\mathbf{0}`$。把 $`A`$ 的各行记为 $`\mathbf{r}_1^T,\ldots,\mathbf{r}_m^T`$，就有
+
+```math
+A\mathbf{x}
+=\begin{bmatrix}
+\mathbf{r}_1^T\mathbf{x}\\
+\vdots\\
+\mathbf{r}_m^T\mathbf{x}
+\end{bmatrix}
+=\mathbf{0}.
+```
+
+因此 $`\mathbf{x}`$ 与每一个行向量的点积都为零，零空间与行空间正交：
+
+```math
+N(A)\perp\mathrm{Col}(A^T).
+```
+
+同理，若 $`\mathbf{y}\in N(A^T)`$，则 $`A^T\mathbf{y}=\mathbf{0}`$，所以 $`\mathbf{y}`$ 与 $`A`$ 的每一列正交：
+
+```math
+N(A^T)\perp\mathrm{Col}(A).
+```
+
+每一对空间的维数又恰好填满所在的环境空间：
+
+```math
+\dim\bigl(\mathrm{Col}(A^T)\bigr)+\dim N(A)
+=r+(n-r)=n,
+```
+
+```math
+\dim\bigl(\mathrm{Col}(A)\bigr)+\dim N(A^T)
+=r+(m-r)=m.
+```
+
+因此可以写成两组正交分解：
+
+```math
+\mathbb{R}^n
+=\mathrm{Col}(A^T)\mathbin{\oplus}N(A),
+\qquad
+\mathbb{R}^m
+=\mathrm{Col}(A)\mathbin{\oplus}N(A^T).
+```
+
+这里的 $`\oplus`$ 表示两个互相正交、只在零向量处相交的子空间共同组成整个环境空间。
+
+### 5. 用消元矩阵寻找左零空间
+
+一次初等行变换可以表示为在左侧乘一个初等矩阵。若从 $`A`$ 到其 RREF 共执行了若干次行变换，把相应的初等矩阵依次记为 $`E_1,\ldots,E_k`$，则
+
+```math
+R=E_k\cdots E_2E_1A.
+```
+
+把全部行变换合并为
+
+```math
+E=E_k\cdots E_2E_1,
+```
+
+便得到老师板书中的主线：
+
+```math
+\boxed{EA=R}.
+```
+
+这里四个矩阵的角色不同：$`A`$ 是原矩阵，$`R=\mathrm{rref}(A)`$ 是消元结果，$`I_m`$ 表示尚未进行任何操作，$`E`$ 是把全部行变换打包后的总行变换矩阵。
+
+为了同时算出 $`E`$，在 $`A`$ 右侧附加单位矩阵，并对两部分执行相同的行变换：
+
+```math
+[A\mid I_m]
+\longrightarrow
+[R\mid E].
+```
+
+其原因是
+
+```math
+E[A\mid I_m]
+=[EA\mid EI_m]
+=[R\mid E].
+```
+
+> **左半边 $`A\to R`$ 记录矩阵变成了什么；右半边 $`I_m\to E`$ 记录刚才对它做了什么。**
+
+若 $`R`$ 的第 $`i`$ 行为零，而 $`E`$ 的对应行为 $`\mathbf{e}_i^T`$，由 $`EA=R`$ 可知
+
+```math
+\mathbf{e}_i^TA=\mathbf{0}^T,
+```
+
+所以
+
+```math
+A^T\mathbf{e}_i=\mathbf{0},
+\qquad
+\mathbf{e}_i\in N(A^T).
+```
+
+$`R`$ 一共有 $`m-r`$ 个零行，$`E`$ 中与这些零行对应的各行转置后，构成 $`N(A^T)`$ 的一组基。这些向量具体记录了原矩阵的哪些行以什么系数组合成零行。
+
+这也解释了熟悉的求逆方法。只有当 $`A`$ 是可逆方阵时，$`R=I`$，于是
+
+```math
+EA=I
+\quad\Longrightarrow\quad
+E=A^{-1},
+```
+
+从而
+
+```math
+[A\mid I]\longrightarrow[I\mid A^{-1}].
+```
+
+一般情况下 $`E`$ 只是总行变换矩阵，并不等于 $`A^{-1}`$。
+
+## 八、用列空间与零空间描述完整解
 
 ### 1. 特解与零空间解
 
@@ -1053,7 +1332,7 @@ A\mathbf{x}_n=\mathbf{0}.
 
 完整解公式把问题分成了两步：列空间决定特解是否存在，零空间决定能否在特解之外继续变化。接下来只需比较 $`r,m,n`$，就能统一判断解的数量。
 
-## 八、用秩判断解的数量
+## 九、用秩判断解的数量
 
 ### 1. 两个核心判断
 
@@ -1190,7 +1469,18 @@ A=
 
 ```math
 \Longleftrightarrow
+\text{各行线性无关}
+\Longleftrightarrow
+\text{各列线性无关}
+\Longleftrightarrow
+\text{各列构成 }\mathbb{R}^n\text{ 的一组基}
+```
+
+```math
+\Longleftrightarrow
 N(A)=\{\mathbf{0}\}
+\Longleftrightarrow
+N(A^T)=\{\mathbf{0}\}
 \Longleftrightarrow
 \mathrm{Col}(A)=\mathbb{R}^n
 \Longleftrightarrow
@@ -1203,6 +1493,27 @@ A\mathbf{x}=\mathbf{b}
 \text{ 对每个 }\mathbf{b}\in\mathbb{R}^n
 \text{ 都有唯一解}.
 ```
+
+若把 $`n`$ 个 $`n`$ 维向量作为列组成方阵
+
+```math
+A=\begin{bmatrix}
+\mathbf{v}_1&\cdots&\mathbf{v}_n
+\end{bmatrix},
+```
+
+那么
+
+```math
+\boxed{
+\mathbf{v}_1,\ldots,\mathbf{v}_n
+\text{ 构成 }\mathbb{R}^n\text{ 的一组基}
+\quad\Longleftrightarrow\quad
+A\text{ 可逆}
+}.
+```
+
+因此，对方阵而言，只要有两行相同，就会破坏行的线性无关性，使秩小于 $`n`$；同一个秩也迫使列线性相关，矩阵因而不可逆。
 
 ### 5. 解的数量为什么只有三种
 
@@ -1234,24 +1545,24 @@ A(\mathbf{x}^{(1)}+c\mathbf{v})
 
 因此，只要出现两个不同的解，就会沿着非零零空间方向产生无穷多个解，不可能恰好只有 $`2`$ 个、$`3`$ 个或其他有限多个解。
 
-## 九、当前课程的统一逻辑
+## 十、当前课程的统一逻辑
 
-### 1. 输出端与输入端
+### 1. 两个环境空间与四个基本子空间
 
 对于 $`C\in\mathbb{R}^{m\times n}`$：
 
 ```math
-\mathrm{Col}(C)\subseteq\mathbb{R}^m,
-\qquad
-N(C)\subseteq\mathbb{R}^n.
+\mathbb{R}^n\xrightarrow{\quad C\quad}\mathbb{R}^m.
 ```
 
-二者从不同方向描述同一个矩阵：
+四个基本子空间从两侧描述同一个矩阵：
 
-| 空间 | 核心问题 |
-| --- | --- |
-| 列空间 $`\mathrm{Col}(C)`$ | 哪些输出 $`\mathbf{b}`$ 能由 $`C`$ 产生？ |
-| 零空间 $`N(C)`$ | 哪些输入 $`\mathbf{x}`$ 会被 $`C`$ 送到零向量？ |
+| 所在位置 | 空间 | 核心问题 |
+| --- | --- | --- |
+| $`\mathbb{R}^n`$ | 行空间 $`\mathrm{Col}(C^T)`$ | $`C`$ 的行能够张成哪些输入方向？ |
+| $`\mathbb{R}^n`$ | 零空间 $`N(C)`$ | 哪些输入 $`\mathbf{x}`$ 会被 $`C`$ 送到零向量？ |
+| $`\mathbb{R}^m`$ | 列空间 $`\mathrm{Col}(C)`$ | 哪些输出 $`\mathbf{b}`$ 能由 $`C`$ 产生？ |
+| $`\mathbb{R}^m`$ | 左零空间 $`N(C^T)`$ | 哪些输出端方向与 $`C`$ 的全部列正交？ |
 
 因此：
 
@@ -1326,6 +1637,30 @@ A\mathbf{x}=\mathbf{b}\text{ 有解}
 =r+(n-r)=n
 ```
 
+转置把同一套结构带到另外两个基本子空间：
+
+```math
+\mathrm{Row}(A)=\mathrm{Col}(A^T),
+\qquad
+\dim\bigl(\mathrm{Col}(A^T)\bigr)=r,
+\qquad
+\dim N(A^T)=m-r.
+```
+
+```math
+N(A)\perp\mathrm{Col}(A^T),
+\qquad
+N(A^T)\perp\mathrm{Col}(A).
+```
+
+消元既显露主元结构，也能记录产生零行的行关系：
+
+```math
+[A\mid I_m]\longrightarrow[R\mid E],
+\qquad
+EA=R.
+```
+
 ```math
 \mathbf{b}\in\mathrm{Col}(A)
 \longrightarrow
@@ -1341,7 +1676,7 @@ r=m\Longrightarrow\text{每个右端向量都有解},
 r=n\Longrightarrow\text{有解时解唯一}.
 ```
 
-最终，列空间描述矩阵能到达哪里，零空间描述矩阵会丢失哪些输入方向；特解负责到达目标输出，零空间负责描述不改变输出的全部自由变化，而主元和秩把这些结构联系在一起。
+最终，列空间描述矩阵能到达哪里，零空间描述矩阵会丢失哪些输入方向；行空间概括矩阵对输入进行检测的方向，左零空间记录与全部列正交的输出端方向。特解负责到达目标输出，零空间负责描述不改变输出的全部自由变化，而主元、秩、转置和消元矩阵把这些结构联系在一起。
 
 ### 3. 术语对照
 
@@ -1355,6 +1690,8 @@ r=n\Longrightarrow\text{有解时解唯一}.
 | basis | 基 | 同时线性无关并张成整个空间的一组向量 |
 | dimension | 维数 | 空间任意一组基所含向量的数量 |
 | column space | 列空间 | 矩阵所有可能输出的集合 |
+| row space | 行空间 | 矩阵各行的张成，也就是 $`\mathrm{Col}(A^T)`$ |
+| left null space | 左零空间 | $`N(A^T)`$，即满足 $`A^T\mathbf{y}=\mathbf{0}`$ 的向量组成的空间 |
 | right-hand side | 右端向量 | $`A\mathbf{x}=\mathbf{b}`$ 中的目标输出 $`\mathbf{b}`$ |
 | pivot | 主元 | 阶梯形矩阵中每个非零行的领先非零元素 |
 | pivot column | 主元列 | 包含主元、提供独立方向的列 |
@@ -1364,11 +1701,13 @@ r=n\Longrightarrow\text{有解时解唯一}.
 | row echelon form | 行阶梯形 | 主元下方为零的阶梯形矩阵 |
 | RREF | 简化行阶梯形 | 主元为 $`1`$，且主元列其余位置全为 $`0`$ |
 | rank | 秩 | 主元数量，也是列空间的维数 |
+| row rank | 行秩 | 行空间的维数，与列秩相等 |
 | null space | 零空间 | 所有满足 $`A\mathbf{x}=\mathbf{0}`$ 的输入组成的空间 |
 | nullity | 零度 | 零空间的维数，即自由变量数量 |
 | special solution | 特殊解 | 依次把一个自由变量设为 $`1`$、其余设为 $`0`$ 得到的解 |
 | particular solution | 特解 | $`A\mathbf{x}=\mathbf{b}`$ 的某一个具体解 $`\mathbf{x}_p`$ |
 | complete solution | 通解 | $`\mathbf{x}_p+N(A)`$，即非齐次方程的全部解 |
 | affine space | 仿射空间 | 子空间经过平移后得到的集合 |
+| elimination matrix | 消元矩阵或行变换矩阵 | 把行操作表示成左乘矩阵；合并后满足 $`EA=R`$ |
 | full rank | 满秩 | 秩达到 $`\min(m,n)`$ |
 | invertible matrix | 可逆矩阵 | 存在逆矩阵 $`A^{-1}`$ 的方阵 |
