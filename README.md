@@ -1,4 +1,9 @@
-# Markdown Notes
+# 数学笔记
 
-This private repository stores Markdown notes.
+本仓库用于按课程进度保存 Markdown 数学笔记。
 
+## 笔记目录
+
+1. [向量空间与四个基本子空间](notes/01_向量空间与四个基本子空间.md)
+
+后续课程使用 `编号_内容.md` 的格式，在 `notes` 目录中新建文件继续整理。
