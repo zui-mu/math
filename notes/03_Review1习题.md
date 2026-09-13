@@ -944,12 +944,338 @@ N(R)=N(A).
     -> 认出这就是“行操作不改变零空间”的一般原理
 ```
 
+## 第 3 题：交换两行对四个基本子空间的影响
+
+### 1. 题目条件
+
+交换矩阵 $`A`$ 的两行，相当于左乘一个置换矩阵 $`P`$：
+
+```math
+B=PA.
+```
+
+置换矩阵是可逆矩阵，并且
+
+```math
+P^{-1}=P^T.
+```
+
+需要判断交换行后，$`A`$ 的四个基本子空间哪些保持不变，哪些通常会改变。
+
+结论如下：
+
+| 空间 | 交换行后是否保持为原来的空间 |
+| --- | --- |
+| $`N(A)`$ | 不变 |
+| $`\mathrm{Row}(A)=\mathrm{Col}(A^T)`$ | 不变 |
+| $`\mathrm{Col}(A)`$ | 通常改变 |
+| $`N(A^T)`$ | 通常改变 |
+
+虽然空间本身有的会改变，但四个空间的维数都不变，因为左乘可逆矩阵不改变秩。
+
+### 2. 零空间不变
+
+```math
+B\mathbf{x}=\mathbf{0}
+\quad\Longleftrightarrow\quad
+PA\mathbf{x}=\mathbf{0}.
+```
+
+由于 $`P`$ 可逆，可以左乘 $`P^{-1}`$：
+
+```math
+PA\mathbf{x}=\mathbf{0}
+\quad\Longleftrightarrow\quad
+A\mathbf{x}=\mathbf{0}.
+```
+
+所以
+
+```math
+\boxed{N(B)=N(A)}.
+```
+
+这就是行交换以及一般初等行变换不改变齐次方程解集的原因。
+
+### 3. 行空间不变
+
+若 $`A`$ 的行向量为 $`\mathbf{r}_1,\mathbf{r}_2,\ldots`$，交换两行只是改变这些行的排列顺序：
+
+```math
+\mathrm{span}\{\mathbf{r}_1,\mathbf{r}_2,\ldots\}
+=
+\mathrm{span}\{\mathbf{r}_2,\mathbf{r}_1,\ldots\}.
+```
+
+因此
+
+```math
+\boxed{\mathrm{Row}(B)=\mathrm{Row}(A)}
+```
+
+也就是
+
+```math
+\boxed{\mathrm{Col}(B^T)=\mathrm{Col}(A^T)}.
+```
+
+更一般地，初等行变换产生的新行是旧行的可逆线性组合，所以行空间保持不变。
+
+### 4. 列空间通常会改变
+
+把 $`A`$ 按列写成
+
+```math
+A=\begin{bmatrix}\mathbf{a}_1&\cdots&\mathbf{a}_n\end{bmatrix},
+```
+
+那么
+
+```math
+B=PA
+=\begin{bmatrix}P\mathbf{a}_1&\cdots&P\mathbf{a}_n\end{bmatrix}.
+```
+
+因此
+
+```math
+\boxed{\mathrm{Col}(B)=P\,\mathrm{Col}(A)}.
+```
+
+这表示列空间整体经过 $`P`$ 的坐标置换。它的维数不变，但在输出空间中的位置可能改变。
+
+例如
+
+```math
+A=\begin{bmatrix}1&0\\0&0\end{bmatrix},
+\qquad
+B=\begin{bmatrix}0&0\\1&0\end{bmatrix},
+```
+
+其中 $`B`$ 是交换 $`A`$ 的两行得到的矩阵。此时
+
+```math
+\mathrm{Col}(A)
+=\mathrm{span}\left\{\begin{bmatrix}1\\0\end{bmatrix}\right\},
+\qquad
+\mathrm{Col}(B)
+=\mathrm{span}\left\{\begin{bmatrix}0\\1\end{bmatrix}\right\}.
+```
+
+原来的列空间是 $`x`$ 轴方向，交换后变成 $`y`$ 轴方向；但二者维数都为 $`1`$。
+
+因此必须区分：
+
+> **行变换保持秩和列空间的维数，但通常不保持列空间本身。**
+
+### 5. 左零空间也会随输出坐标改变
+
+由 $`B=PA`$ 可得
+
+```math
+B^T=A^TP^T.
+```
+
+如果 $`\mathbf{y}\in N(B^T)`$，则
+
+```math
+A^TP^T\mathbf{y}=\mathbf{0}.
+```
+
+令 $`\mathbf{z}=P^T\mathbf{y}`$，就有 $`\mathbf{z}\in N(A^T)`$。又因为 $`\mathbf{y}=P\mathbf{z}`$，所以
+
+```math
+\boxed{N(B^T)=P\,N(A^T)}.
+```
+
+继续使用上面的例子：
+
+```math
+N(A^T)
+=\mathrm{span}\left\{\begin{bmatrix}0\\1\end{bmatrix}\right\},
+\qquad
+N(B^T)
+=\mathrm{span}\left\{\begin{bmatrix}1\\0\end{bmatrix}\right\}.
+```
+
+所以左零空间也改变了，但维数仍然相同。
+
+### 6. 从输入端与输出端统一理解
+
+对于
+
+```math
+A:\mathbb{R}^n\longrightarrow\mathbb{R}^m,
+```
+
+$`N(A)`$ 与 $`\mathrm{Row}(A)`$ 都位于输入空间 $`\mathbb{R}^n`$；左乘 $`P`$ 只改变输出端，所以这两个空间不变。
+
+$`\mathrm{Col}(A)`$ 与 $`N(A^T)`$ 都位于输出空间 $`\mathbb{R}^m`$；左乘 $`P`$ 改变输出坐标，所以这两个空间随 $`P`$ 一起变换。
+
+```text
+输入空间 R^n                         输出空间 R^m
+N(A)       不变                      Col(A)       变为 P Col(A)
+Row(A)     不变                      N(A^T)       变为 P N(A^T)
+```
+
+这也解释了为什么可以用 RREF 求原矩阵的秩、零空间和行空间，却不能直接把 R 的主元列当作原矩阵 $`A`$ 的列空间基；行变换已经改变了列空间的位置，求列空间基时必须回到原矩阵取对应列。
+
+## 第 4 题：相同四个基本子空间是否推出 $`A=cB`$
+
+### 1. 判断结论
+
+设 $`A,B\in\mathbb{R}^{m\times n}`$，并且它们的四个基本子空间分别相同：
+
+```math
+\mathrm{Col}(A)=\mathrm{Col}(B),
+\qquad
+N(A)=N(B),
+```
+
+```math
+\mathrm{Col}(A^T)=\mathrm{Col}(B^T),
+\qquad
+N(A^T)=N(B^T).
+```
+
+判断是否必然存在一个常数 $`c`$，使得
+
+```math
+A=cB.
+```
+
+结论是：
+
+> **不一定。相同的四个基本子空间不能推出 $`A=cB`$。**
+
+四个子空间记录的是方向、可达性和被压为零的方向；$`A=cB`$ 则要求矩阵的每一个元素都由同一个比例因子统一改变，条件强得多。
+
+### 2. 最简单的可逆矩阵反例
+
+取
+
+```math
+A=I_2=\begin{bmatrix}1&0\\0&1\end{bmatrix},
+\qquad
+B=\begin{bmatrix}1&1\\0&1\end{bmatrix}.
+```
+
+两个矩阵都可逆，因此它们的秩都是 $`2`$。对任意可逆 $`2\times2`$ 矩阵，都有
+
+```math
+\mathrm{Col}(A)=\mathbb{R}^2,
+\qquad
+N(A)=\{\mathbf{0}\},
+```
+
+```math
+\mathrm{Col}(A^T)=\mathbb{R}^2,
+\qquad
+N(A^T)=\{\mathbf{0}\}.
+```
+
+所以 $`A`$ 与 $`B`$ 的四个基本子空间全部相同。
+
+但是它们不可能满足 $`A=cB`$。如果比较左上角元素，会得到 $`c=1`$；此时 $`cB`$ 的右上角元素为 $`1`$，而 $`A`$ 的右上角元素为 $`0`$，矛盾。
+
+因此
+
+> **结论：** 四个基本子空间相同，不能推出 $`A=cB`$。
+
+### 3. 为什么任意两个可逆方阵都能构成这类反例
+
+对任意可逆 $`n\times n`$ 矩阵，$`r=n`$，所以
+
+```math
+\mathrm{Col}(A)=\mathbb{R}^n,
+\qquad
+N(A)=\{\mathbf{0}\}.
+```
+
+转置仍然可逆，因此
+
+```math
+\mathrm{Col}(A^T)=\mathbb{R}^n,
+\qquad
+N(A^T)=\{\mathbf{0}\}.
+```
+
+也就是说，所有可逆 $`n\times n`$ 矩阵的四个基本子空间都相同，但可逆矩阵有很多，它们显然不可能全都只是彼此的常数倍。
+
+### 4. 非满秩反例
+
+即使不使用可逆矩阵，也可以取
+
+```math
+A=\begin{bmatrix}1&0&0\\0&2&0\\0&0&0\end{bmatrix},
+\qquad
+B=\begin{bmatrix}3&0&0\\0&4&0\\0&0&0\end{bmatrix}.
+```
+
+它们的四个基本子空间分别都是
+
+```math
+\mathrm{Col}(A)=\mathrm{Col}(B)
+=\mathrm{span}\{\mathbf{e}_1,\mathbf{e}_2\},
+```
+
+```math
+N(A)=N(B)=\mathrm{span}\{\mathbf{e}_3\},
+```
+
+```math
+\mathrm{Col}(A^T)=\mathrm{Col}(B^T)
+=\mathrm{span}\{\mathbf{e}_1,\mathbf{e}_2\},
+```
+
+```math
+N(A^T)=N(B^T)=\mathrm{span}\{\mathbf{e}_3\}.
+```
+
+如果 $`A=cB`$，第一条对角元素要求
+
+```math
+1=3c,
+```
+
+而第二条对角元素又要求
+
+```math
+2=4c.
+```
+
+前者给出 $`c=1/3`$，后者给出 $`c=1/2`$，相互矛盾。因此它们也不是常数倍关系。
+
+### 5. 能推出的正确方向
+
+如果 $`A=cB`$ 且 $`c\neq0`$，那么数乘不会改变列空间、零空间、行空间和左零空间：
+
+```math
+\mathrm{Col}(cB)=\mathrm{Col}(B),
+\qquad
+N(cB)=N(B),
+```
+
+```math
+\mathrm{Col}((cB)^T)=\mathrm{Col}(B^T),
+\qquad
+N((cB)^T)=N(B^T).
+```
+
+所以，若 $`A=cB`$ 且 $`c\neq0`$，那么四个基本子空间相同。
+
+但反方向不成立。
+
+> **四个基本子空间是矩阵的“方向骨架”，不是矩阵的全部数值信息。它们不能告诉我们每个方向具体被放大多少、被剪切多少。**
+
 ## Review 1 当前总结
 
-这两道题从两个方向使用了零空间：
+目前的习题内容从四个方向使用了前面学过的零空间、列空间、秩与可逆性：
 
 1. 第 1 题从“特解 + 零空间”反推矩阵，并由列空间判断哪些右端向量可解。
 2. 第 2 题利用可逆左乘不改变零空间，把复杂矩阵的齐次方程转化为更简单矩阵的齐次方程。
+3. 第 3 题区分行变换后保持不变的输入端空间，以及随输出坐标变化的输出端空间。
+4. 第 4 题说明四个基本子空间只描述结构，不足以确定矩阵的具体数值，更不能推出两个矩阵是常数倍。
 
 它们共同使用的核心关系是
 
@@ -965,10 +1291,20 @@ A\mathbf{x}=\mathbf{b}\text{ 有解}
 \mathbf{b}\in\mathrm{Col}(A),
 ```
 
+> 当 $`C`$ 可逆时，$`N(CD)=N(D)`$。
+
+以及行变换 $`B=PA`$ 下的关系
+
 ```math
-C\text{ 可逆}
-\quad\Longrightarrow\quad
-N(CD)=N(D).
+N(B)=N(A),
+\qquad
+\mathrm{Row}(B)=\mathrm{Row}(A),
 ```
 
-> **Review 1 的主线不是孤立地计算矩阵，而是从解的结构识别零空间，从零空间识别自由度与列关系，再用列空间、秩和可逆性判断方程的存在性与唯一性。**
+```math
+\mathrm{Col}(B)=P\,\mathrm{Col}(A),
+\qquad
+N(B^T)=P\,N(A^T).
+```
+
+> **Review 1 的主线不是孤立地计算矩阵，而是从解的结构识别零空间，从零空间识别自由度与列关系，再用列空间、秩、行变换和可逆性判断方程的存在性、唯一性以及四个基本子空间的变化。**
