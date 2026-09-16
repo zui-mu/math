@@ -1268,14 +1268,647 @@ N((cB)^T)=N(B^T).
 
 > **四个基本子空间是矩阵的“方向骨架”，不是矩阵的全部数值信息。它们不能告诉我们每个方向具体被放大多少、被剪切多少。**
 
+## 第 5 题：判断一个方阵是否可逆
+
+### 1. 可逆的前提
+
+通常意义下的逆矩阵只对方阵定义。因此首先要确认
+
+```math
+A\in\mathbb{R}^{n\times n}.
+```
+
+矩形矩阵仍然可以讨论秩、零空间、列独立和方程的解，但一般不谈一个同时满足左右逆的普通 $`A^{-1}`$。
+
+### 2. 可逆矩阵的等价条件
+
+对于 $`n\times n`$ 方阵 $`A`$，下面条件完全等价：
+
+| 观察角度 | 可逆时的条件 |
+| --- | --- |
+| 秩 | $`\mathrm{rank}(A)=n`$ |
+| 主元 | 每一行、每一列都有主元 |
+| RREF | $`\mathrm{rref}(A)=I_n`$ |
+| 零空间 | $`N(A)=\{\mathbf{0}\}`$ |
+| 列 | 所有列线性无关 |
+| 列空间 | $`\mathrm{Col}(A)=\mathbb{R}^n`$ |
+| 方程 | 对每个 $`\mathbf{b}\in\mathbb{R}^n`$，$`A\mathbf{x}=\mathbf{b}`$ 都有唯一解 |
+| 行列式 | $`\det(A)\neq0`$ |
+| 逆矩阵 | 存在 $`A^{-1}`$，且 $`A^{-1}A=AA^{-1}=I_n`$ |
+
+因此，只要证明其中任意一条，就可以推出 $`A`$ 可逆。
+
+### 3. 用主元判断
+
+例如
+
+```math
+A=\begin{bmatrix}1&2\\3&4\end{bmatrix}
+\longrightarrow
+\begin{bmatrix}1&2\\0&-2\end{bmatrix}.
+```
+
+消元后有两个主元，所以
+
+```math
+r=2=n.
+```
+
+继续消元得到
+
+```math
+\mathrm{rref}(A)=I_2,
+```
+
+因此 $`A`$ 可逆。
+
+反例
+
+```math
+B=\begin{bmatrix}1&2\\2&4\end{bmatrix}
+\longrightarrow
+\begin{bmatrix}1&2\\0&0\end{bmatrix}
+```
+
+只有一个主元：
+
+```math
+r=1<2.
+```
+
+所以 $`B`$ 不可逆。原因也可以从列关系看出：
+
+```math
+\begin{bmatrix}2\\4\end{bmatrix}
+=2\begin{bmatrix}1\\2\end{bmatrix}.
+```
+
+列相关意味着存在非零向量
+
+```math
+\mathbf{x}=\begin{bmatrix}-2\\1\end{bmatrix}
+```
+
+使得
+
+```math
+B\mathbf{x}=\mathbf{0}.
+```
+
+于是 $`N(B)\neq\{\mathbf{0}\}`$。矩阵把一个非零输入压成了零，信息已经丢失，因此不可能再用逆矩阵唯一恢复输入。
+
+### 4. 一对一与到达全部输出
+
+把方阵看成线性变换
+
+```math
+A:\mathbb{R}^n\longrightarrow\mathbb{R}^n.
+```
+
+如果
+
+```math
+N(A)=\{\mathbf{0}\},
+```
+
+则 $`A`$ 是 one-to-one。因为若 $`A\mathbf{x}_1=A\mathbf{x}_2`$，就有
+
+```math
+A(\mathbf{x}_1-\mathbf{x}_2)=\mathbf{0},
+```
+
+从而 $`\mathbf{x}_1-\mathbf{x}_2=\mathbf{0}`$，即 $`\mathbf{x}_1=\mathbf{x}_2`$。
+
+方阵中 one-to-one 会自动推出 onto，也就是
+
+```math
+\mathrm{Col}(A)=\mathbb{R}^n.
+```
+
+因此，对方阵来说，列独立既保证解的唯一性，也保证每个右端向量都能到达：
+
+```math
+A\text{ 是 }n\times n,
+\qquad
+r=n
+```
+
+推出
+
+```math
+N(A)=\{\mathbf{0}\}
+\quad\Longrightarrow\quad
+\text{解至多一个},
+```
+
+```math
+\mathrm{Col}(A)=\mathbb{R}^n
+\quad\Longrightarrow\quad
+\text{每个右端向量都有解}.
+```
+
+合起来就是：
+
+```math
+\boxed{
+A\text{ 为方阵且 }r=n
+\quad\Longrightarrow\quad
+A\mathbf{x}=\mathbf{b}
+\text{ 对每个 }\mathbf{b}\text{ 都有唯一解}
+}.
+```
+
+### 5. 最实用的判断链
+
+```text
+A 是方阵
+    -> 检查每一列是否都有 pivot
+    -> r=n
+    -> N(A)={0}
+    -> 列线性无关
+    -> Col(A)=R^n
+    -> Ax=b 对任意 b 都有唯一解
+    -> A 可逆
+```
+
+## 第 6 题：正交、点积与四个基本子空间
+
+### 1. $`\mathbf{x}^T\mathbf{y}`$ 就是点积
+
+若 $`\mathbf{x},\mathbf{y}\in\mathbb{R}^n`$ 都写成列向量，直接相乘 $`\mathbf{x}\mathbf{y}`$ 不符合矩阵乘法的尺寸要求。先转置：
+
+```math
+\mathbf{x}^T\mathbf{y}
+=
+\begin{bmatrix}x_1&\cdots&x_n\end{bmatrix}
+\begin{bmatrix}y_1\\\vdots\\y_n\end{bmatrix}
+=x_1y_1+\cdots+x_ny_n.
+```
+
+这正是熟悉的点积：
+
+```math
+\boxed{\mathbf{x}\cdot\mathbf{y}=\mathbf{x}^T\mathbf{y}}.
+```
+
+因此以下三种说法完全等价：
+
+```math
+\mathbf{x}\perp\mathbf{y}
+\quad\Longleftrightarrow\quad
+\mathbf{x}\cdot\mathbf{y}=0
+\quad\Longleftrightarrow\quad
+\mathbf{x}^T\mathbf{y}=0.
+```
+
+例如
+
+```math
+\mathbf{x}=\begin{bmatrix}1\\2\end{bmatrix},
+\qquad
+\mathbf{y}=\begin{bmatrix}2\\-1\end{bmatrix}
+```
+
+满足
+
+```math
+\mathbf{x}^T\mathbf{y}=1\cdot2+2\cdot(-1)=0,
+```
+
+所以两个向量正交。
+
+### 2. 为什么零空间与行空间正交
+
+把 $`A`$ 的各行记作 $`\mathbf{r}_1^T,\ldots,\mathbf{r}_m^T`$。若
+
+```math
+\mathbf{x}\in N(A),
+```
+
+那么
+
+```math
+A\mathbf{x}=\mathbf{0}
+```
+
+按行展开就是
+
+```math
+\mathbf{r}_1^T\mathbf{x}=0,
+\qquad
+\ldots,
+\qquad
+\mathbf{r}_m^T\mathbf{x}=0.
+```
+
+所以 $`\mathbf{x}`$ 与 $`A`$ 的每一行都正交。
+
+而行空间是这些行的所有线性组合：
+
+```math
+\mathrm{Row}(A)=\mathrm{Col}(A^T)
+=\mathrm{span}\{\mathbf{r}_1,\ldots,\mathbf{r}_m\}.
+```
+
+任取行空间中的向量
+
+```math
+\mathbf{y}=c_1\mathbf{r}_1+\cdots+c_m\mathbf{r}_m,
+```
+
+就有
+
+```math
+\mathbf{y}^T\mathbf{x}
+=c_1\mathbf{r}_1^T\mathbf{x}+\cdots+c_m\mathbf{r}_m^T\mathbf{x}
+=0.
+```
+
+因此
+
+```math
+\boxed{N(A)\perp\mathrm{Col}(A^T)}.
+```
+
+关键逻辑是：
+
+```text
+x 属于 N(A)
+    -> x 与 A 的每一行正交
+    -> x 与这些行的任意线性组合正交
+    -> x 与整个 Row(A)=Col(A^T) 正交
+```
+
+同理可以得到另一对：
+
+```math
+\boxed{\mathrm{Col}(A)\perp N(A^T)}.
+```
+
+### 3. 正交子空间的交集
+
+两个子空间 $`S,T`$ 正交，意思是任意 $`\mathbf{s}\in S`$ 和任意 $`\mathbf{t}\in T`$ 都满足
+
+```math
+\mathbf{s}^T\mathbf{t}=0.
+```
+
+如果某个向量同时属于两者，那么它必须和自己正交：
+
+```math
+\mathbf{v}\in S\cap T
+\quad\Longrightarrow\quad
+\mathbf{v}^T\mathbf{v}=0.
+```
+
+但
+
+```math
+\mathbf{v}^T\mathbf{v}
+=v_1^2+\cdots+v_n^2
+```
+
+只有在 $`\mathbf{v}=\mathbf{0}`$ 时才为零。因此
+
+```math
+S\perp T
+\quad\Longrightarrow\quad
+S\cap T=\{\mathbf{0}\}.
+```
+
+零向量与任何向量都正交，因为 $`\mathbf{0}^T\mathbf{x}=0`$；所以“正交子空间只能在零向量处相交”并不矛盾。
+
+### 4. 正交补与维数
+
+若在 $`\mathbb{R}^3`$ 中，行空间是一条直线，那么它的正交补必须是一个二维平面；零空间不可能也是一条直线。因为
+
+```math
+\dim\bigl(\mathrm{Row}(A)\bigr)=r,
+\qquad
+\dim N(A)=n-r,
+```
+
+所以
+
+```math
+\boxed{
+\dim\bigl(\mathrm{Row}(A)\bigr)+\dim N(A)=n
+}.
+```
+
+当 $`n=3`$ 时，可能的维数分配是 $`1+2`$ 或 $`2+1`$，而不是 $`1+1`$。
+
+这也可以写成正交补关系：
+
+```math
+N(A)=\mathrm{Row}(A)^\perp,
+\qquad
+\mathrm{Row}(A)=N(A)^\perp.
+```
+
+特殊情况下：
+
+```math
+(\mathbb{R}^n)^\perp=\{\mathbf{0}\},
+\qquad
+\{\mathbf{0}\}^\perp=\mathbb{R}^n.
+```
+
+因此一条非零直线不可能与整个 $`\mathbb{R}^2`$ 正交，因为整个空间包含这条直线自身的非零方向；但任何子空间都与零子空间正交。
+
+## 第 7 题：从无解方程到最小二乘正规方程
+
+### 1. 原方程无解时怎么办
+
+因为
+
+```math
+A\mathbf{x}\in\mathrm{Col}(A),
+```
+
+如果
+
+```math
+\mathbf{b}\notin\mathrm{Col}(A),
+```
+
+那么
+
+```math
+A\mathbf{x}=\mathbf{b}
+```
+
+无解。最小二乘法不再要求完全达到 $`\mathbf{b}`$，而是在列空间中寻找距离 $`\mathbf{b}`$ 最近的点：
+
+```math
+\mathbf{p}=A\hat{\mathbf{x}}\in\mathrm{Col}(A).
+```
+
+令误差为
+
+```math
+\mathbf{e}=\mathbf{b}-A\hat{\mathbf{x}}.
+```
+
+### 2. 最近点为什么产生正交条件
+
+如果误差还包含沿列空间的方向，就可以在列空间里继续移动 $`A\hat{\mathbf{x}}`$，使它离 $`\mathbf{b}`$ 更近。因此最近点必须满足
+
+```math
+\mathbf{e}\perp\mathrm{Col}(A).
+```
+
+而
+
+```math
+\mathrm{Col}(A)^\perp=N(A^T),
+```
+
+所以
+
+```math
+\mathbf{e}\in N(A^T)
+\quad\Longleftrightarrow\quad
+A^T\mathbf{e}=\mathbf{0}.
+```
+
+代入误差的定义：
+
+```math
+A^T(\mathbf{b}-A\hat{\mathbf{x}})=\mathbf{0}.
+```
+
+整理得到
+
+```math
+\boxed{A^TA\hat{\mathbf{x}}=A^T\mathbf{b}}.
+```
+
+这就是**正规方程**（normal equations）。它不是把原本无解的 $`A\mathbf{x}=\mathbf{b}`$ 变成了完全相等，而是把问题改成了列空间中的正交投影。
+
+### 3. 一个最小例子
+
+取
+
+```math
+A=\begin{bmatrix}1\\1\end{bmatrix},
+\qquad
+\mathbf{b}=\begin{bmatrix}1\\0\end{bmatrix}.
+```
+
+此时
+
+```math
+\mathrm{Col}(A)
+=\mathrm{span}\left\{\begin{bmatrix}1\\1\end{bmatrix}\right\},
+```
+
+而 $`\mathbf{b}`$ 不在这条直线上，所以原方程无解。
+
+正规方程中的两项为
+
+```math
+A^TA=\begin{bmatrix}1&1\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix}=2,
+\qquad
+A^T\mathbf{b}=\begin{bmatrix}1&1\end{bmatrix}\begin{bmatrix}1\\0\end{bmatrix}=1.
+```
+
+于是
+
+```math
+2\hat{x}=1,
+\qquad
+\hat{x}=\frac12.
+```
+
+投影点为
+
+```math
+A\hat{x}
+=\begin{bmatrix}1/2\\1/2\end{bmatrix},
+```
+
+误差为
+
+```math
+\mathbf{e}
+=\begin{bmatrix}1\\0\end{bmatrix}
+-\begin{bmatrix}1/2\\1/2\end{bmatrix}
+=\begin{bmatrix}1/2\\-1/2\end{bmatrix}.
+```
+
+检查正交性：
+
+```math
+\begin{bmatrix}1&1\end{bmatrix}
+\begin{bmatrix}1/2\\-1/2\end{bmatrix}=0.
+```
+
+所以误差确实垂直于列空间。
+
+### 4. 正规方程的逻辑链
+
+```text
+Ax=b 无解
+    -> b 不在 Col(A) 中
+    -> 在 Col(A) 中找最近点 A x_hat
+    -> 误差 e=b-A x_hat 垂直于 Col(A)
+    -> e 属于 N(A^T)
+    -> A^T e=0
+    -> A^T A x_hat=A^T b
+```
+
+如果 $`A`$ 的列线性无关，正规方程有唯一解；这需要下一题的等价关系。
+
+## 第 8 题：为什么 $`A^TA`$ 可逆等价于列独立
+
+### 1. 先确认尺寸
+
+若
+
+```math
+A\in\mathbb{R}^{m\times n},
+```
+
+那么
+
+```math
+A^TA\in\mathbb{R}^{n\times n}.
+```
+
+所以 $`A^TA`$ 是方阵，可以使用“方阵可逆当且仅当零空间只有零向量”的判断。
+
+### 2. 证明两个零空间相同
+
+先假设
+
+```math
+A^TA\mathbf{x}=\mathbf{0}.
+```
+
+左乘 $`\mathbf{x}^T`$：
+
+```math
+\mathbf{x}^TA^TA\mathbf{x}=0.
+```
+
+利用
+
+```math
+\mathbf{x}^TA^T=(A\mathbf{x})^T,
+```
+
+可得
+
+```math
+(A\mathbf{x})^T(A\mathbf{x})=0.
+```
+
+而向量与自身的点积是长度平方：
+
+```math
+\|A\mathbf{x}\|^2=0.
+```
+
+实向量长度平方为零只能说明
+
+```math
+A\mathbf{x}=\mathbf{0}.
+```
+
+反过来，如果 $`A\mathbf{x}=\mathbf{0}`$，显然
+
+```math
+A^TA\mathbf{x}=A^T\mathbf{0}=\mathbf{0}.
+```
+
+因此
+
+```math
+\boxed{A^TA\mathbf{x}=\mathbf{0}
+\quad\Longleftrightarrow\quad
+A\mathbf{x}=\mathbf{0}}.
+```
+
+也就是
+
+```math
+\boxed{N(A^TA)=N(A)}.
+```
+
+### 3. 接回列线性无关
+
+前面已经知道
+
+```math
+\text{A 的列线性无关}
+\quad\Longleftrightarrow\quad
+N(A)=\{\mathbf{0}\}.
+```
+
+结合 $`N(A^TA)=N(A)`$，得到
+
+```math
+\begin{aligned}
+A\text{ 的列线性无关}
+&\Longleftrightarrow N(A)=\{\mathbf{0}\}\\
+&\Longleftrightarrow N(A^TA)=\{\mathbf{0}\}\\
+&\Longleftrightarrow A^TA\text{ 可逆}.
+\end{aligned}
+```
+
+最终结论是
+
+```math
+\boxed{
+A^TA\text{ 可逆}
+\quad\Longleftrightarrow\quad
+A\text{ 的列向量线性无关}
+}.
+```
+
+### 4. 为什么这对最小二乘重要
+
+正规方程是
+
+```math
+A^TA\hat{\mathbf{x}}=A^T\mathbf{b}.
+```
+
+如果 $`A`$ 的列独立，那么 $`A^TA`$ 可逆，于是可以唯一求出
+
+```math
+\boxed{
+\hat{\mathbf{x}}
+=(A^TA)^{-1}A^T\mathbf{b}
+}.
+```
+
+如果 $`A`$ 的列相关，那么 $`N(A)\neq\{\mathbf{0}\}`$，从而 $`N(A^TA)\neq\{\mathbf{0}\}`$，$`A^TA`$ 不可逆，不能直接写出上面的逆矩阵公式。
+
+这条结论把前面的列独立、零空间、可逆矩阵和最小二乘解连接起来：
+
+```text
+A 的列独立
+    -> N(A)={0}
+    -> N(A^T A)={0}
+    -> A^T A 可逆
+    -> 正规方程有唯一解
+    -> 最小二乘解可以写成 (A^T A)^(-1) A^T b
+```
+
 ## Review 1 当前总结
 
-目前的习题内容从四个方向使用了前面学过的零空间、列空间、秩与可逆性：
+目前的习题内容从八个方向使用了前面学过的零空间、列空间、秩、正交与可逆性：
 
 1. 第 1 题从“特解 + 零空间”反推矩阵，并由列空间判断哪些右端向量可解。
 2. 第 2 题利用可逆左乘不改变零空间，把复杂矩阵的齐次方程转化为更简单矩阵的齐次方程。
 3. 第 3 题区分行变换后保持不变的输入端空间，以及随输出坐标变化的输出端空间。
 4. 第 4 题说明四个基本子空间只描述结构，不足以确定矩阵的具体数值，更不能推出两个矩阵是常数倍。
+5. 第 5 题把方阵可逆与满秩、主元、零空间、列独立、`Ax=b` 的存在唯一性以及行列式统一起来。
+6. 第 6 题从 $`x^T y`$ 的点积形式出发，证明零空间与行空间、列空间与左零空间之间的正交关系。
+7. 第 7 题从 $`Ax=b`$ 无解出发，用误差向量垂直于列空间的条件推出最小二乘正规方程。
+8. 第 8 题证明 $`N(A^T A)=N(A)`$，从而说明 $`A^T A`$ 可逆当且仅当 $`A`$ 的列向量线性无关。
 
 它们共同使用的核心关系是
 
@@ -1289,6 +1922,31 @@ N((cB)^T)=N(B^T).
 A\mathbf{x}=\mathbf{b}\text{ 有解}
 \quad\Longleftrightarrow\quad
 \mathbf{b}\in\mathrm{Col}(A),
+```
+
+```math
+N(A)\perp\mathrm{Col}(A^T),
+\qquad
+\mathrm{Col}(A)\perp N(A^T),
+```
+
+```math
+A^T A\widehat{\mathbf{x}}=A^T\mathbf{b},
+\qquad
+N(A^T A)=N(A).
+```
+
+对于方阵，判断可逆可以沿着下面的等价链理解：
+
+```text
+A 是 n×n 方阵
+    -> r=n
+    -> 每行、每列都有 pivot
+    -> rref(A)=I_n
+    -> N(A)={0}，列向量线性无关
+    -> Col(A)=R^n
+    -> 对每个 b 都有唯一解 Ax=b
+    -> A 可逆
 ```
 
 > 当 $`C`$ 可逆时，$`N(CD)=N(D)`$。
@@ -1307,4 +1965,4 @@ N(B)=N(A),
 N(B^T)=P\,N(A^T).
 ```
 
-> **Review 1 的主线不是孤立地计算矩阵，而是从解的结构识别零空间，从零空间识别自由度与列关系，再用列空间、秩、行变换和可逆性判断方程的存在性、唯一性以及四个基本子空间的变化。**
+> **Review 1 的主线不是孤立地计算矩阵，而是从解的结构识别零空间，从零空间识别自由度与列关系，再用列空间、秩、行变换、正交和可逆性判断方程的存在性、唯一性、近似解以及四个基本子空间的关系。**
